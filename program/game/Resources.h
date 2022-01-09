@@ -20,16 +20,14 @@ public:
 	//描画位置とハンドルをまとめたオブジェクトを格納するvector
 	std::vector<Graphic*> gObject;
 
-	
-
 	//一度読み込んだghを保存するmap
 	std::unordered_map<std::string, int> ghmap;
 
 	//ghとURLのmap
 	std::unordered_map<int, std::string> URLmap;
-
+	//画像をロードしてmapに格納する関数
 	int LoadGraphEx(std::string gh);
-
+	//ghからstring型のurlを返す関数
 	std::string GetURL(int gh);
 
 	void Update();

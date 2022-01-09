@@ -38,6 +38,9 @@ public:
 
 private:
 	Menu* resourcesFrame = nullptr;
+	Menu* saveButton = nullptr;
+	Menu* resetButton = nullptr;
+
 	Graphic* edit = nullptr;
 	Menu* makeMenu = nullptr;
 
@@ -66,8 +69,16 @@ private:
 	};
 	sequence nowSeq = sequence::main;
 
+
+	std::vector<std::string> UIText;
+
 	void ChangeSequence(sequence seq);
-	void drawNowSeqName(sequence seq);
+	void DrawNowSeqName(sequence seq);
+
+	void Reset();
+
+	void UiToString();
+	void UiOutput();
 
 
 };

@@ -1,0 +1,4 @@
+Menu* hoge=new Menu(108,32,216,241,gh(int))
+Menu* hoge=new Menu(274,220,24,24,gh(int))
+Menu* hoge=new Menu(101,353,244,231,gh(int))
+Menu* hoge=new Menu(115,368,198,191,gh(int))

@@ -4,6 +4,8 @@
 #include"Resources.h"
 #include"Graphic.h"
 #include"MenuWindow.h"
+#include<fstream>
+#include<string>
 
 EditorManager::EditorManager()
 {
@@ -12,6 +14,9 @@ EditorManager::EditorManager()
 void EditorManager::InitManager()
 {
 	resourcesFrame = new Menu(0, 0, 300, 768, "graphics/WindowBase_02.png");
+	saveButton = new Menu(900, 0, 100, 100, "graphics/WindowBase_02.png");
+	resetButton = new Menu(900, 110, 100, 100, "graphics/WindowBase_02.png");
+
 	black = GetColor(0, 0, 0);
 	resources = new Resources();
 }
@@ -34,18 +39,28 @@ void EditorManager::Update()
 
 void EditorManager::Draw()
 {
-	
-	drawNowSeqName(nowSeq);
-	//DrawBox(0, 0, 200, 200, -1, true);
-	resources->draw();
+	if (nowSeq == sequence::main) {
+		saveButton->Menu_Draw();
+		DrawStringEx(saveButton->menu_x + 10, saveButton->menu_y + 50, black, "save");
 
-	if (nowSeq == sequence::place) {
-		DrawRotaGraph(mouseX, mouseY, 1, 0, nowSelectGraphic->gh, true);
+		resetButton->Menu_Draw();
+		DrawStringEx(resetButton->menu_x + 10, resetButton->menu_y + 50, black, "reset");
+
+		DrawNowSeqName(nowSeq);
+
 	}
 	//if (setGraphic.empty())return;
 	for (auto set : setGraphic) {
 		set->Menu_Draw();
 	}
+	if (nowSeq == sequence::place) {
+		DrawRotaGraph(mouseX, mouseY, 1, 0, nowSelectGraphic->gh, true);
+	}
+	if (nowSeq == sequence::edit) {
+		if (makeMenu == nullptr)return;
+		makeMenu->Menu_Draw();
+	}
+
 	if (nowSeq == sequence::main) {
 		if (CheckMousePointToRect(mouseX, mouseY, resourcesFrame->menu_x,
 			resourcesFrame->menu_width, resourcesFrame->menu_y, resourcesFrame->menu_height)) {
@@ -73,6 +88,20 @@ bool EditorManager::Seq_main(const float deltatime)
 			}
 		}
 	}
+
+	if (t2k::Input::isMouseTrigger(t2k::Input::MOUSE_RELEASED_LEFT)) {
+		if (CheckMousePointToRect(mouseX, mouseY, saveButton->menu_x,
+			saveButton->menu_width, saveButton->menu_y, saveButton->menu_height)) {
+			//テキストに書き出す
+			UiToString();
+			UiOutput();
+		}
+		if (CheckMousePointToRect(mouseX, mouseY, resetButton->menu_x,
+			resetButton->menu_width, resetButton->menu_y, resetButton->menu_height)) {
+			Reset();
+		}
+	}
+
 	return true;
 }
 
@@ -110,7 +139,7 @@ bool EditorManager::Seq_Edit(const float deltatime)
 	makeMenu->menu_width = mouseX - makeMenu->menu_x;
 	makeMenu->menu_height = mouseY - makeMenu->menu_y;
 
-	makeMenu->Menu_Draw();
+	/*makeMenu->Menu_Draw();*/
 
 	if (t2k::Input::isMouseTrigger(t2k::Input::MOUSE_RELEASED_LEFT)) {
 
@@ -137,7 +166,7 @@ void EditorManager::ChangeSequence(sequence seq)
 
 }
 
-void EditorManager::drawNowSeqName(sequence seq)
+void EditorManager::DrawNowSeqName(sequence seq)
 {
 	if (seq == sequence::main) {
 		DrawStringEx(0, 700, -1, "MainSequence");
@@ -145,4 +174,40 @@ void EditorManager::drawNowSeqName(sequence seq)
 	else if (seq == sequence::place) {
 		DrawStringEx(0, 700, -1, "PlaceSequence");
 	}
+	else if (seq == sequence::edit) {
+		DrawStringEx(0, 700, -1, "EditSequence");
+	}
+}
+
+void EditorManager::Reset()
+{
+	setGraphic.clear();
+	t2k::debugTrace("\n完成UIリストを全削除しました\n");
+}
+
+void EditorManager::UiToString()
+{
+	for (auto menu : setGraphic) {
+
+		std::string hoge = "Menu* hoge=new Menu(" + std::to_string(menu->menu_x) + "," + std::to_string(menu->menu_y) + "," + std::to_string(menu->menu_width) + "," +
+			std::to_string(menu->menu_height) + "," + "gh(int)" + ")";
+		UIText.emplace_back(hoge);
+	}
+}
+
+void EditorManager::UiOutput()
+{
+	std::ofstream writingfile;
+	std::string filename = "newUI.txt";
+
+	writingfile.open(filename, std::ios::out);
+	int i = 0;
+	for (auto outText : UIText) {
+		std::string writingtext = UIText[i];
+		writingfile << writingtext << std::endl;
+		++i;
+	}
+
+	writingfile.close();
+
 }

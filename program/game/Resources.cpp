@@ -9,7 +9,6 @@ extern EditorManager* eManager;
 
 Resources::Resources()
 {
-	
 	LoadResources();
 }
 int Resources::LoadGraphEx(std::string gh)
@@ -47,14 +46,14 @@ std::string Resources::GetURL(int gh)
 
 void Resources::Update()
 {
-
-
 }
 
 void Resources::LoadResources()
 {
+	//リソース画像は個別に読み込む
 	Frame_gh_1 = LoadGraphEx("graphics/WindowBase_01.png");
 	Frame_gh_2 = LoadGraphEx("graphics/WindowBase_02.png");
+	//必ずghAllvectorに格納する
 	ghAll.emplace_back(Frame_gh_1);
 	ghAll.emplace_back(Frame_gh_2);
 	CreateGraphicObject();
@@ -73,9 +72,6 @@ void Resources::CreateGraphicObject()
 
 void Resources::draw()
 {
-	//フォルダを開くボタン
-	DrawBox(900, 0, 1000, 100, -1, true);
-
 
 }
 
