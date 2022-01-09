@@ -9,13 +9,12 @@ extern EditorManager* eManager;
 
 Resources::Resources()
 {
-	resourcesFrame = new Menu(0, 0, 300, 768, "graphics/WindowBase_02.png");
-	black = GetColor(0, 0, 0);
+	
 	LoadResources();
 }
 int Resources::LoadGraphEx(std::string gh)
 {
-
+	//**intŒ^‚Ìgh‚ð“o˜^,•Ô‚·ˆ—
 	auto it = ghmap.find(gh);
 	if (it != ghmap.end()) {
 		return ghmap[gh];
@@ -24,16 +23,32 @@ int Resources::LoadGraphEx(std::string gh)
 	else {
 		int loadgh = LoadGraph(gh.c_str());
 		ghmap.insert(std::make_pair(gh, loadgh));
+
+		//**‹tŒŸõ‚Ìmap“o˜^
+		URLmap.insert(std::make_pair(loadgh, gh));
+		//**
 	}
-
-
 	return ghmap[gh];
+	//**
+
+}
+
+std::string Resources::GetURL(int gh)
+{
+	auto it = URLmap.find(gh);
+	if (it != URLmap.end()) {
+		return URLmap[gh];
+	}
+	else {
+		return "‘¶Ý‚µ‚È‚¢‚æ";
+	}
+	return "ƒGƒ‰[‚¾‚æ";
 }
 
 void Resources::Update()
 {
-	
-	
+
+
 }
 
 void Resources::LoadResources()
@@ -50,7 +65,7 @@ void Resources::CreateGraphicObject()
 	int x = 50;
 	int y = 50;
 	for (auto gh : ghAll) {
-		Graphic* g = new Graphic(t2k::Vector3(x, y, 0), gh,48,48);
+		Graphic* g = new Graphic(t2k::Vector3(x, y, 0), gh, 48, 48);
 		gObject.emplace_back(g);
 		y += 60;
 	}
@@ -60,19 +75,7 @@ void Resources::draw()
 {
 	//ƒtƒHƒ‹ƒ_‚ðŠJ‚­ƒ{ƒ^ƒ“
 	DrawBox(900, 0, 1000, 100, -1, true);
-	
-	if (eManager->CheckMousePointToRect(eManager->mouseX, eManager->mouseY, resourcesFrame->menu_x, 
-		resourcesFrame->menu_width, resourcesFrame->menu_y, resourcesFrame->menu_height)) {
 
-		resourcesFrame->Menu_Draw();
-		for (auto g : gObject) {
-			DrawRotaGraph(g->pos.x, g->pos.y, 1, 0, g->gh, true);
-		}
-	}
-	else {
-		DrawBox(0, 0, 200, 50, -1, true);
-		DrawStringEx(0, 25, black, "resources");
-	}
 
 }
 

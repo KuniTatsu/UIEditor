@@ -10,8 +10,7 @@ class Resources {
 
 public:
 
-	Menu* resourcesFrame = nullptr;
-
+	
 	Resources();
 
 	int Frame_gh_1=0;
@@ -26,12 +25,18 @@ public:
 	//ˆê“x“Ç‚İ‚ñ‚¾gh‚ğ•Û‘¶‚·‚émap
 	std::unordered_map<std::string, int> ghmap;
 
+	//gh‚ÆURL‚Ìmap
+	std::unordered_map<int, std::string> URLmap;
+
 	int LoadGraphEx(std::string gh);
+
+	std::string GetURL(int gh);
+
 	void Update();
 	void draw();
 
 private:
-	int black;
+	
 	//‰æ‘œ‚Ì“Ç‚İ‚İ
 	void LoadResources();
 	//gh‚©‚çGraphicƒNƒ‰ƒX‚ğ¶¬‚·‚é
